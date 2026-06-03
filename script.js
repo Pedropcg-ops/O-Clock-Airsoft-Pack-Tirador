@@ -72,8 +72,40 @@ function initSubtleHeroMotion() {
   update();
 }
 
+function initConsultModal() {
+  const modal = document.querySelector("#consult-modal");
+  if (!modal) return;
+
+  const openButtons = document.querySelectorAll("[data-open-consult]");
+  const closeButtons = modal.querySelectorAll("[data-close-consult]");
+  const firstInput = modal.querySelector("input[name='nombre']");
+
+  const openModal = (event) => {
+    event?.preventDefault();
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("is-modal-open");
+    window.setTimeout(() => firstInput?.focus(), 120);
+  };
+
+  const closeModal = () => {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("is-modal-open");
+  };
+
+  openButtons.forEach((button) => button.addEventListener("click", openModal));
+  closeButtons.forEach((button) => button.addEventListener("click", closeModal));
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.classList.contains("is-open")) closeModal();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initRevealAnimations();
   initSmoothAnchors();
   initSubtleHeroMotion();
+
+  initConsultModal();
 });
